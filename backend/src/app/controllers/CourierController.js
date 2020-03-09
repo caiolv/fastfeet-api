@@ -88,6 +88,19 @@ class CourierController {
       email,
     });
   }
+
+  async delete(req, res) {
+    const { id } = req.params;
+    const courier = await Courier.findByPk(id);
+
+    if (!courier) {
+      return res.status(400).json({ error: 'Courier does not exist. ' });
+    }
+
+    await courier.destroy();
+
+    return res.json(courier);
+  }
 }
 
 export default new CourierController();
