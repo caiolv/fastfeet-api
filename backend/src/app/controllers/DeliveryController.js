@@ -12,6 +12,8 @@ import Delivery from '../models/Delivery';
 import Recipient from '../models/Recipient';
 import File from '../models/File';
 
+import Mail from '../../lib/Mail';
+
 class DeliveryController {
   async index(req, res) {
     const { page = 1 } = req.query;
@@ -90,6 +92,20 @@ class DeliveryController {
       recipient_id,
       courier_id,
       product,
+    });
+
+    const address = `${recipientExists.city}, ${recipientExists.state}`;
+    const adressStreet = `${recipientExists.street}`;
+
+    await Mail.sendMail({
+      to: courierExists.email,
+      subject: 'Nova entrega cadastrada',
+      template: 'new_delivery',
+      context: {
+        courier: courierExists.name,
+        recipient: recipientExists.name,
+        address: `${adressStreet} - ${address}`,
+      },
     });
 
     return res.json(delivery);
