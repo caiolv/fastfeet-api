@@ -32,5 +32,6 @@ routes.get('/couriers', CourierController.index);
 routes.delete('/couriers/:id', CourierController.delete);
 
 routes.post('/deliveries', DeliveryController.store);
+routes.get('/deliveries', DeliveryController.index);
 
 export default routes;
