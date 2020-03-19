@@ -12,7 +12,8 @@ import Delivery from '../models/Delivery';
 import Recipient from '../models/Recipient';
 import File from '../models/File';
 
-import Mail from '../../lib/Mail';
+import NewDeliveryMail from '../jobs/NewDeliveryMail';
+import Queue from '../../lib/Queue';
 
 class DeliveryController {
   async index(req, res) {
@@ -97,15 +98,11 @@ class DeliveryController {
     const address = `${recipientExists.city}, ${recipientExists.state}`;
     const adressStreet = `${recipientExists.street}`;
 
-    await Mail.sendMail({
-      to: courierExists.email,
-      subject: 'Nova entrega cadastrada',
-      template: 'new_delivery',
-      context: {
-        courier: courierExists.name,
-        recipient: recipientExists.name,
-        address: `${adressStreet} - ${address}`,
-      },
+    await Queue.add(NewDeliveryMail.key, {
+      courier: courierExists,
+      recipient: recipientExists,
+      adressStreet,
+      address,
     });
 
     return res.json(delivery);
