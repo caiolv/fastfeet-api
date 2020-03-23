@@ -122,14 +122,7 @@ class DeliveryController {
       return res.status(400).json({ error: 'Validation fails' });
     }
 
-    const {
-      product,
-      recipient_id,
-      courier_id,
-      start_date,
-      end_date,
-      signature_id,
-    } = req.body;
+    const { recipient_id, courier_id, signature_id } = req.body;
 
     const { id } = req.params;
 
@@ -152,46 +145,6 @@ class DeliveryController {
 
       if (!recipientExists) {
         return res.status(400).json({ error: 'Recipient does not exist.' });
-      }
-    }
-
-    if (start_date) {
-      const deliveryRegistry = parseISO(delivery.created_at);
-      const startDate = parseISO(start_date);
-      const currentDate = startOfDay(startDate);
-
-      if (isBefore(startDate, deliveryRegistry)) {
-        return res.status(400).json({ error: 'Past dates are not permitted.' });
-      }
-
-      if (
-        !isWithinInterval(startDate, {
-          start: setHours(currentDate, 8),
-          end: setHours(currentDate, 18),
-        })
-      )
-        return res.status(401).json({
-          error:
-            'You can only withdraw the deliveries between 08:00h and 18:00h',
-        });
-    }
-
-    if (end_date) {
-      const deliveryRegistry = parseISO(delivery.created_at);
-      const endDate = parseISO(end_date);
-
-      if (isBefore(endDate, deliveryRegistry)) {
-        return res.status(400).json({ error: 'Past dates are not permitted.' });
-      }
-    }
-
-    if (signature_id) {
-      const signatureExists = await File.findByPk(signature_id);
-
-      if (!signatureExists) {
-        return res
-          .status(400)
-          .json({ error: 'Informed file for signature does not exist.' });
       }
     }
 

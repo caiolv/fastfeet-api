@@ -9,6 +9,7 @@ import FileController from './app/controllers/FileController';
 import CourierController from './app/controllers/CourierController';
 import DeliveryController from './app/controllers/DeliveryController';
 import CourierDeliverController from './app/controllers/CourierDeliverController';
+import DeliveryStatusController from './app/controllers/DeliveryStatusController';
 
 import authMiddleware from './app/middlewares/auth';
 
@@ -19,6 +20,8 @@ routes.post('/users', UserController.store);
 routes.post('/sessions', SessionController.store);
 
 routes.get('/courier/:id/deliveries', CourierDeliverController.index);
+
+routes.post('/delivery/:id/status', DeliveryStatusController.store);
 
 routes.use(authMiddleware);
 
