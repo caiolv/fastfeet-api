@@ -27,6 +27,10 @@ class DeliveryStatusController {
 
     const delivery = await Delivery.findByPk(id);
 
+    if (!delivery) {
+      return res.status(400).json({ error: "Delivery doesn't exist." });
+    }
+
     if (start_date) {
       const startDate = parseISO(start_date);
       const currentDate = startOfDay(startDate);
