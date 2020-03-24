@@ -3,7 +3,7 @@ import Delivery from '../models/Delivery';
 import Recipient from '../models/Recipient';
 import File from '../models/File';
 
-class CourierDeliverController {
+class CourierDeliveryController {
   async index(req, res) {
     const deliveries = await Delivery.findAll({
       attributes: ['id', 'product', 'start_date'],
@@ -45,4 +45,4 @@ class CourierDeliverController {
   }
 }
 
-export default new CourierDeliverController();
+export default new CourierDeliveryController();
