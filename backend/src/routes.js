@@ -10,6 +10,7 @@ import CourierController from './app/controllers/CourierController';
 import DeliveryController from './app/controllers/DeliveryController';
 import CourierDeliveryController from './app/controllers/CourierDeliveryController';
 import DeliveryStatusController from './app/controllers/DeliveryStatusController';
+import DeliveryProblemsController from './app/controllers/DeliveryProblemsController';
 
 import authMiddleware from './app/middlewares/auth';
 
@@ -22,6 +23,9 @@ routes.post('/sessions', SessionController.store);
 routes.get('/courier/:id/deliveries', CourierDeliveryController.index);
 
 routes.post('/delivery/:id/status', DeliveryStatusController.store);
+
+routes.get('/delivery/:id/problems', DeliveryProblemsController.index);
+routes.post('/delivery/:id/problems', DeliveryProblemsController.store);
 
 routes.use(authMiddleware);
 
