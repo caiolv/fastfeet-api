@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import DeliveryProblem from '../models/DeliveryProblem';
 import Delivery from '../models/Delivery';
 
-class DeliveryProblemsController {
+class DeliveryProblemController {
   async index(req, res) {
     const problems = await DeliveryProblem.findAll({
       where: {
@@ -53,4 +53,4 @@ class DeliveryProblemsController {
   async delete(req, res) {}
 }
 
-export default new DeliveryProblemsController();
+export default new DeliveryProblemController();
