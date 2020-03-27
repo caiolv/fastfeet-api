@@ -8,8 +8,6 @@ class NewDeliveryMail {
   async handle({ data }) {
     const { courier, recipient, adressStreet, address } = data;
 
-    console.log('A fila executou');
-
     await Mail.sendMail({
       to: courier.email,
       subject: 'Nova entrega cadastrada',
