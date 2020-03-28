@@ -2,6 +2,11 @@ import * as Yup from 'yup';
 
 import DeliveryProblem from '../models/DeliveryProblem';
 import Delivery from '../models/Delivery';
+import Courier from '../models/Courier';
+import Recipient from '../models/Recipient';
+
+import DeliveryCanceledMail from '../jobs/DeliveryCanceledMail';
+import Queue from '../../lib/Queue';
 
 class DeliveryProblemController {
   async index(req, res) {
@@ -50,7 +55,44 @@ class DeliveryProblemController {
     });
   }
 
-  async delete(req, res) {}
+  async delete(req, res) {
+    const { id: problem_id } = req.params;
+
+    const problem = await DeliveryProblem.findByPk(problem_id);
+
+    if (!problem) {
+      return res.status(400).json({ error: "Problem doesn't exist." });
+    }
+
+    const delivery = await Delivery.findByPk(problem.delivery_id, {
+      attributes: ['id', 'product'],
+      include: [
+        {
+          model: Courier,
+          as: 'courier',
+          attributes: ['name', 'email'],
+        },
+        {
+          model: Recipient,
+          as: 'recipient',
+          attributes: ['name'],
+        },
+      ],
+    });
+
+    const deliverUpdated = await delivery.update({
+      canceled_at: new Date(),
+    });
+
+    await Queue.add(DeliveryCanceledMail.key, {
+      delivery,
+    });
+    // courier: delivery.courier.name,
+    // recipient: delivery.recipient.name,
+    // product: delivery.product,
+
+    return res.json(deliverUpdated);
+  }
 }
 
 export default new DeliveryProblemController();
