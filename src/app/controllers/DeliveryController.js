@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import Sequelize, { Op } from 'sequelize';
 import {
   startOfHour,
   isWithinInterval,
@@ -17,11 +18,20 @@ import Queue from '../../lib/Queue';
 
 class DeliveryController {
   async index(req, res) {
-    const { page = 1 } = req.query;
+    const { page = 1, search = '' } = req.query;
     const perPage = 5;
 
+    const searchLower = search.toLowerCase();
+
     const deliveries = await Delivery.findAll({
-      // where: { canceled_at: null },
+      where: Sequelize.where(Sequelize.fn('lower', Sequelize.col('product')), {
+        [Op.like]: `%${searchLower}%`,
+      }),
+      // {
+      //   product: {
+      //     [Op.like]: `%${q}%`,
+      //   },
+      // },
       order: ['id'],
       limit: perPage,
       offset: (page - 1) * perPage,
