@@ -18,26 +18,19 @@ import Queue from '../../lib/Queue';
 class DeliveryController {
   async index(req, res) {
     const { page = 1 } = req.query;
+    const perPage = 5;
 
     const deliveries = await Delivery.findAll({
-      where: { canceled_at: null },
+      // where: { canceled_at: null },
       order: ['id'],
-      limit: 20,
-      offset: (page - 1) * 20,
-      attributes: ['id', 'product', 'start_date', 'end_date', 'canceled_at'],
+      limit: perPage,
+      offset: (page - 1) * perPage,
+      attributes: ['id', 'product', 'status'],
       include: [
         {
           model: Recipient,
           as: 'recipient',
-          attributes: [
-            'name',
-            'street',
-            'number',
-            'complement',
-            'state',
-            'city',
-            'cep',
-          ],
+          attributes: ['name', 'state', 'city', 'cep'],
         },
         {
           model: Courier,
@@ -50,11 +43,6 @@ class DeliveryController {
               attributes: ['name', 'path', 'url'],
             },
           ],
-        },
-        {
-          model: File,
-          as: 'signature',
-          attributes: ['name', 'path', 'url'],
         },
       ],
     });
