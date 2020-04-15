@@ -11,9 +11,18 @@ class RecipientController {
     const searchLower = search.toLowerCase();
 
     const recipients = await Recipient.findAll({
-      where: Sequelize.where(Sequelize.fn('lower', Sequelize.col('name')), {
-        [Op.like]: `%${searchLower}%`,
-      }),
+      where: {
+        [Op.and]: {
+          canceled_at: null,
+          [Op.where]: Sequelize.where(
+            Sequelize.fn('lower', Sequelize.col('name')),
+            {
+              [Op.like]: `%${searchLower}%`,
+            }
+          ),
+        },
+      },
+
       attributes: [
         'id',
         'name',
