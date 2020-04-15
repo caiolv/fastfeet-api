@@ -24,9 +24,9 @@ class DeliveryStatusController {
 
     const { start_date, end_date } = req.body;
     const { id } = req.params;
-    let status = 'PENDENTE';
 
     const delivery = await Delivery.findByPk(id);
+    let { status } = delivery;
 
     if (!delivery) {
       return res.status(400).json({ error: "Delivery doesn't exist." });

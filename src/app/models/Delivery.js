@@ -8,6 +8,7 @@ class Delivery extends Model {
         start_date: Sequelize.DATE,
         end_date: Sequelize.DATE,
         canceled_at: Sequelize.DATE,
+        status: Sequelize.STRING,
       },
       {
         sequelize,
