@@ -72,7 +72,7 @@ class CourierController {
     const { email } = req.body;
     const { id } = req.params;
 
-    const courier = await Courier.findByPk(req.id);
+    const courier = await Courier.findByPk(id);
 
     if (!courier) {
       return res.status(400).json({ error: "Courier doesn't exist." });
