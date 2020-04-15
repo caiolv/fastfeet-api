@@ -1,8 +1,35 @@
 import * as Yup from 'yup';
+import { Op } from 'sequelize';
 
 import Recipient from '../models/Recipient';
 
 class RecipientController {
+  async index(req, res) {
+    const { page = 1, search = '' } = req.query;
+    const perPage = 5;
+
+    const recipients = await Recipient.findAll({
+      where: {
+        name: { [Op.like]: `%${search}%` },
+      },
+      attributes: [
+        'id',
+        'name',
+        'street',
+        'number',
+        'complement',
+        'state',
+        'city',
+        'cep',
+      ],
+      order: ['id'],
+      limit: perPage,
+      offset: (page - 1) * perPage,
+    });
+
+    return res.json(recipients);
+  }
+
   async store(req, res) {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
