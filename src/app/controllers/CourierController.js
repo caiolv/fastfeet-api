@@ -1,11 +1,21 @@
 import * as Yup from 'yup';
+import { Op } from 'sequelize';
 import Courier from '../models/Courier';
 import File from '../models/File';
 
 class CourierController {
   async index(req, res) {
+    const { page = 1, search = '' } = req.query;
+    const perPage = 5;
+
     const couriers = await Courier.findAll({
+      where: {
+        name: { [Op.like]: `%${search}%` },
+      },
       attributes: ['id', 'name', 'email', 'avatar_id'],
+      order: ['id'],
+      limit: perPage,
+      offset: (page - 1) * perPage,
       include: [
         {
           model: File,
