@@ -10,7 +10,10 @@ class CourierController {
 
     const couriers = await Courier.findAll({
       where: {
-        name: { [Op.like]: `%${search}%` },
+        [Op.and]: {
+          canceled_at: null,
+          name: { [Op.like]: `%${search}%` },
+        },
       },
       attributes: ['id', 'name', 'email', 'avatar_id'],
       order: ['id'],
@@ -107,9 +110,11 @@ class CourierController {
       return res.status(400).json({ error: 'Courier does not exist. ' });
     }
 
-    await courier.destroy();
+    const courierUpdated = await courier.update({
+      canceled_at: new Date(),
+    });
 
-    return res.json(courier);
+    return res.json(courierUpdated);
   }
 
   async show(req, res) {

@@ -11,6 +11,7 @@ class Recipient extends Model {
         state: Sequelize.STRING,
         city: Sequelize.STRING,
         cep: Sequelize.STRING,
+        canceled_at: Sequelize.DATE,
       },
       {
         sequelize,

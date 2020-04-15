@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { Op } from 'sequelize';
+import Sequelize, { Op } from 'sequelize';
 
 import Recipient from '../models/Recipient';
 
@@ -8,10 +8,12 @@ class RecipientController {
     const { page = 1, search = '' } = req.query;
     const perPage = 5;
 
+    const searchLower = search.toLowerCase();
+
     const recipients = await Recipient.findAll({
-      where: {
-        name: { [Op.like]: `%${search}%` },
-      },
+      where: Sequelize.where(Sequelize.fn('lower', Sequelize.col('name')), {
+        [Op.like]: `%${searchLower}%`,
+      }),
       attributes: [
         'id',
         'name',
@@ -135,6 +137,21 @@ class RecipientController {
         city,
       },
     });
+  }
+
+  async delete(req, res) {
+    const { id } = req.params;
+    const recipient = await Recipient.findByPk(id);
+
+    if (!recipient) {
+      return res.status(400).json({ error: 'Recipient does not exist. ' });
+    }
+
+    const recipientUpdated = await recipient.update({
+      canceled_at: new Date(),
+    });
+
+    return res.json(recipientUpdated);
   }
 
   async show(req, res) {
