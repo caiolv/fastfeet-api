@@ -32,7 +32,9 @@ routes.use(authMiddleware);
 
 routes.put('/users', UserController.update);
 
+routes.get('/recipients', RecipientController.index);
 routes.post('/recipients', RecipientController.store);
+routes.get('/recipients/:id', RecipientController.show);
 routes.put('/recipients/:id', RecipientController.update);
 
 routes.post('/files', upload.single('file'), FileController.store);
@@ -40,11 +42,13 @@ routes.post('/files', upload.single('file'), FileController.store);
 routes.post('/couriers', CourierController.store);
 routes.put('/couriers', CourierController.update);
 routes.get('/couriers', CourierController.index);
+routes.get('/couriers/:id', CourierController.show);
 routes.delete('/couriers/:id', CourierController.delete);
 
 routes.post('/deliveries', DeliveryController.store);
 routes.get('/deliveries', DeliveryController.index);
 routes.put('/deliveries/:id', DeliveryController.update);
+routes.get('/deliveries/:id', DeliveryController.show);
 routes.delete('/deliveries/:id', DeliveryController.delete);
 
 export default routes;

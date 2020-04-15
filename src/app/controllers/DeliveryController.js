@@ -1,13 +1,5 @@
 import * as Yup from 'yup';
 import Sequelize, { Op } from 'sequelize';
-import {
-  startOfHour,
-  isWithinInterval,
-  setHours,
-  parseISO,
-  isBefore,
-  startOfDay,
-} from 'date-fns';
 import Courier from '../models/Courier';
 import Delivery from '../models/Delivery';
 import Recipient from '../models/Recipient';
@@ -27,11 +19,6 @@ class DeliveryController {
       where: Sequelize.where(Sequelize.fn('lower', Sequelize.col('product')), {
         [Op.like]: `%${searchLower}%`,
       }),
-      // {
-      //   product: {
-      //     [Op.like]: `%${q}%`,
-      //   },
-      // },
       order: ['id'],
       limit: perPage,
       offset: (page - 1) * perPage,
@@ -166,6 +153,31 @@ class DeliveryController {
     // await delivery.destroy();
 
     return res.json(deliverUpdated);
+  }
+
+  async show(req, res) {
+    const { id } = req.params;
+    const delivery = await Delivery.findByPk(id, {
+      attributes: ['id', 'product', 'status'],
+      include: [
+        {
+          model: Recipient,
+          as: 'recipient',
+          attributes: ['id', 'name'],
+        },
+        {
+          model: Courier,
+          as: 'courier',
+          attributes: ['id', 'name'],
+        },
+      ],
+    });
+
+    if (!delivery) {
+      return res.status(400).json({ error: 'Delivery does not exist. ' });
+    }
+
+    return res.json(delivery);
   }
 }
 

@@ -109,6 +109,28 @@ class RecipientController {
       },
     });
   }
+
+  async show(req, res) {
+    const { id } = req.params;
+    const courier = await Recipient.findByPk(id, {
+      attributes: [
+        'id',
+        'name',
+        'street',
+        'number',
+        'complement',
+        'state',
+        'city',
+        'cep',
+      ],
+    });
+
+    if (!courier) {
+      return res.status(400).json({ error: 'Recipient does not exist. ' });
+    }
+
+    return res.json(courier);
+  }
 }
 
 export default new RecipientController();

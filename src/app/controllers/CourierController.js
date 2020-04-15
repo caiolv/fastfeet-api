@@ -111,6 +111,19 @@ class CourierController {
 
     return res.json(courier);
   }
+
+  async show(req, res) {
+    const { id } = req.params;
+    const courier = await Courier.findByPk(id, {
+      attributes: ['id', 'name', 'email', 'avatar_id'],
+    });
+
+    if (!courier) {
+      return res.status(400).json({ error: 'Courier does not exist. ' });
+    }
+
+    return res.json(courier);
+  }
 }
 
 export default new CourierController();
