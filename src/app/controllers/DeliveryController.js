@@ -78,6 +78,7 @@ class DeliveryController {
       recipient_id,
       courier_id,
       product,
+      status: 'PENDENTE',
     });
 
     const address = `${recipientExists.city}, ${recipientExists.state}`;

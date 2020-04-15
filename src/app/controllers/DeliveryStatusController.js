@@ -24,6 +24,7 @@ class DeliveryStatusController {
 
     const { start_date, end_date } = req.body;
     const { id } = req.params;
+    let status = 'PENDENTE';
 
     const delivery = await Delivery.findByPk(id);
 
@@ -62,6 +63,8 @@ class DeliveryStatusController {
         return res.status(401).json({
           error: 'You can only withdraw deliveries between 08:00h and 18:00h',
         });
+
+      status = 'RETIRADA';
     }
 
     if (end_date) {
@@ -69,9 +72,13 @@ class DeliveryStatusController {
       if (isBefore(endDate, new Date())) {
         return res.status(400).json({ error: 'Past dates are not permitted.' });
       }
+      status = 'ENTREGUE';
     }
 
-    const deliveryResponse = await delivery.update(req.body);
+    const deliveryResponse = await delivery.update({
+      ...req.body,
+      status,
+    });
 
     return res.json(deliveryResponse);
   }
