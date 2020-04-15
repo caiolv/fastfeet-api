@@ -149,6 +149,7 @@ class DeliveryController {
 
     const deliverUpdated = await delivery.update({
       canceled_at: new Date(),
+      status: 'CANCELADA',
     });
 
     // await delivery.destroy();
