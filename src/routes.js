@@ -40,7 +40,7 @@ routes.put('/recipients/:id', RecipientController.update);
 routes.post('/files', upload.single('file'), FileController.store);
 
 routes.post('/couriers', CourierController.store);
-routes.put('/couriers', CourierController.update);
+routes.put('/couriers/:id', CourierController.update);
 routes.get('/couriers', CourierController.index);
 routes.get('/couriers/:id', CourierController.show);
 routes.delete('/couriers/:id', CourierController.delete);
