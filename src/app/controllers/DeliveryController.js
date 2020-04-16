@@ -22,12 +22,12 @@ class DeliveryController {
       order: ['id'],
       limit: perPage,
       offset: (page - 1) * perPage,
-      attributes: ['id', 'product', 'status'],
+      attributes: ['id', 'product', 'status', 'start_date', 'end_date'],
       include: [
         {
           model: Recipient,
           as: 'recipient',
-          attributes: ['name', 'state', 'city', 'cep'],
+          attributes: ['name', 'state', 'city', 'cep', 'street', 'number'],
         },
         {
           model: Courier,
