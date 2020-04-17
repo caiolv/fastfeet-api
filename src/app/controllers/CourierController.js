@@ -120,7 +120,14 @@ class CourierController {
   async show(req, res) {
     const { id } = req.params;
     const courier = await Courier.findByPk(id, {
-      attributes: ['id', 'name', 'email', 'avatar_id'],
+      attributes: ['id', 'name', 'email'],
+      include: [
+        {
+          model: File,
+          as: 'avatar',
+          attributes: ['name', 'path', 'url'],
+        },
+      ],
     });
 
     if (!courier) {

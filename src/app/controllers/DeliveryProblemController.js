@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import Sequelize, { Op } from 'sequelize';
 
 import DeliveryProblem from '../models/DeliveryProblem';
 import Delivery from '../models/Delivery';
@@ -10,6 +11,35 @@ import Queue from '../../lib/Queue';
 
 class DeliveryProblemController {
   async index(req, res) {
+    const { page = 1, search = '' } = req.query;
+    const perPage = 5;
+
+    const searchLower = search.toLowerCase();
+
+    const problems = await DeliveryProblem.findAll({
+      attributes: ['id', 'description'],
+      order: ['id'],
+      limit: perPage,
+      offset: (page - 1) * perPage,
+      include: [
+        {
+          model: Delivery,
+          as: 'delivery',
+          attributes: ['id', 'product'],
+          where: Sequelize.where(
+            Sequelize.fn('lower', Sequelize.col('product')),
+            {
+              [Op.like]: `%${searchLower}%`,
+            }
+          ),
+        },
+      ],
+    });
+
+    return res.json(problems);
+  }
+
+  async show(req, res) {
     const problems = await DeliveryProblem.findAll({
       where: {
         delivery_id: req.params.id,

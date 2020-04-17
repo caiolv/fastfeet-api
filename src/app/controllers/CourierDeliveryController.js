@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import Courier from '../models/Courier';
 import Delivery from '../models/Delivery';
 import Recipient from '../models/Recipient';
@@ -5,13 +6,22 @@ import File from '../models/File';
 
 class CourierDeliveryController {
   async index(req, res) {
+    const { page = 1, delivered = false } = req.query;
+    const perPage = 5;
+    console.log(delivered);
     const deliveries = await Delivery.findAll({
-      attributes: ['id', 'product', 'start_date'],
+      attributes: ['id', 'product', 'status', 'created_at', 'end_date'],
       where: {
-        courier_id: req.params.id,
-        end_date: null,
-        canceled_at: null,
+        end_date:
+          delivered === 'true'
+            ? {
+                [Op.not]: null,
+              }
+            : null,
       },
+      order: ['id'],
+      limit: perPage,
+      offset: (page - 1) * perPage,
       include: [
         {
           model: Recipient,
