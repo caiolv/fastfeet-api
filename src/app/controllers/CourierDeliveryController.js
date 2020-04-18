@@ -6,18 +6,25 @@ import File from '../models/File';
 
 class CourierDeliveryController {
   async index(req, res) {
+    const { id } = req.params;
     const { page = 1, delivered = false } = req.query;
     const perPage = 5;
-    console.log(delivered);
+
+    const deliveredBoolean = JSON.parse(delivered); // === 'true';
+
     const deliveries = await Delivery.findAll({
-      attributes: ['id', 'product', 'status', 'created_at', 'end_date'],
+      attributes: [
+        'id',
+        'product',
+        'status',
+        'created_at',
+        'start_date',
+        'end_date',
+      ],
       where: {
-        end_date:
-          delivered === 'true'
-            ? {
-                [Op.not]: null,
-              }
-            : null,
+        end_date: deliveredBoolean ? { [Op.not]: null } : null,
+        courier_id: id,
+        canceled_at: null,
       },
       order: ['id'],
       limit: perPage,
