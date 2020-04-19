@@ -10,7 +10,7 @@ class CourierDeliveryController {
     const { page = 1, delivered = false } = req.query;
     const perPage = 5;
 
-    const deliveredBoolean = JSON.parse(delivered); // === 'true';
+    const deliveredBoolean = JSON.parse(delivered);
 
     const deliveries = await Delivery.findAll({
       attributes: [

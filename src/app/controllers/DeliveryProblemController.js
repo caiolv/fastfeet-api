@@ -40,10 +40,15 @@ class DeliveryProblemController {
   }
 
   async show(req, res) {
+    const { page = 1 } = req.query;
+    const perPage = 5;
+
     const problems = await DeliveryProblem.findAll({
       where: {
         delivery_id: req.params.id,
       },
+      limit: perPage,
+      offset: (page - 1) * perPage,
       include: [
         {
           model: Delivery,
