@@ -4,8 +4,26 @@ module.exports = {
       'couriers',
       [
         {
-          name: 'Jefferson',
-          email: 'jefferson@correios.com.br',
+          name: 'Alisson Oliveira',
+          email: 'alisson@correios.com.br',
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          name: 'Leandro Nunes',
+          email: 'leadro@correios.com.br',
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          name: 'Amanda Castro',
+          email: 'amanda@correios.com.br',
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          name: 'Amaral Júnior',
+          email: 'amaral@correios.com.br',
           created_at: new Date(),
           updated_at: new Date(),
         },

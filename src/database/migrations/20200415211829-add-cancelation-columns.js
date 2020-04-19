@@ -12,5 +12,10 @@ module.exports = {
     ]);
   },
 
-  down: (queryInterface, Sequelize) => {},
+  down: queryInterface => {
+    return Promise.all([
+      queryInterface.removeColumn('recipients', 'canceled_at'),
+      queryInterface.removeColumn('couriers', 'canceled_at'),
+    ]);
+  },
 };
