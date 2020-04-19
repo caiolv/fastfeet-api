@@ -28,7 +28,6 @@ routes.post('/delivery/:id/status', DeliveryStatusController.store);
 
 routes.get('/delivery/:id/problems', DeliveryProblemController.show);
 routes.post('/delivery/:id/problems', DeliveryProblemController.store);
-routes.delete('/problem/:id/cancel-delivery', DeliveryProblemController.delete);
 
 routes.use(authMiddleware);
 
@@ -54,5 +53,6 @@ routes.get('/deliveries/:id', DeliveryController.show);
 routes.delete('/deliveries/:id', DeliveryController.delete);
 
 routes.get('/problems', DeliveryProblemController.index);
+routes.delete('/problem/:id/cancel-delivery', DeliveryProblemController.delete);
 
 export default routes;
