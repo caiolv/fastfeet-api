@@ -106,14 +106,13 @@ class DeliveryController {
       courier_id: Yup.number(),
       start_date: Yup.date(),
       end_date: Yup.date(),
-      signature_id: Yup.number(),
     });
 
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation fails' });
     }
 
-    const { recipient_id, courier_id, signature_id } = req.body;
+    const { recipient_id, courier_id } = req.body;
 
     const { id } = req.params;
 
