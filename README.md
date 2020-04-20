@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img alt="GoStack" src="https://rocketseat-cdn.s3-sa-east-1.amazonaws.com/bootcamp-header.png" width="200px" />
+  <img alt="FastFeet" src=".github/logo.svg" width="300px" />
 </h1>
 
 <h3 align="center">FastFeet - API</h3>
